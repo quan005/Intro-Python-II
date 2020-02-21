@@ -1,10 +1,10 @@
 from room import Room
+from player import Player
 
 # Declare all the rooms
 
 room = {
-    'outside':  Room("Outside Cave Entrance",
-                     "North of you, the cave mount beckons"),
+    'outside':  Room("Outside Cave Entrance", """North of you, the cave mount beckons"""),
 
     'foyer':    Room("Foyer", """Dim light filters in from the south. Dusty
 passages run north and east."""),
@@ -38,6 +38,8 @@ room['treasure'].s_to = room['narrow']
 #
 
 # Make a new player object that is currently in the 'outside' room.
+player = Player("Stephen", room['outside'])
+choice = input("Press M to start or Q to quit.").lower()
 
 # Write a loop that:
 #
@@ -49,3 +51,57 @@ room['treasure'].s_to = room['narrow']
 # Print an error message if the movement isn't allowed.
 #
 # If the user enters "q", quit the game.
+print(f'Welcome {player.name}')
+
+while choice != "":
+    print("\n", player)
+
+    if choice == "q":
+        print("You quit the game!")
+        break
+
+    elif choice == "m":
+        move = input("where would you like to go?\n Press N to go North, S to go South, E to go East, W to go West, and Q to Quit: ").lower()
+
+        if move == "q":
+            print("You quit the game!")
+            break
+
+        elif move == "n":
+            if player.current_room == room['outside']:
+                player.current_room = room['outside'].n_to
+            elif player.current_room == room['foyer']:
+                player.current_room = room['foyer'].n_to
+            elif player.current_room == room['narrow']:
+                player.current_room = room['narrow'].n_to
+            else:
+                print("That way is Forbidden, you cannot go there!")
+                continue
+
+        elif move == "s":
+            if player.current_room == room['overlook']:
+                player.current_room = room['overlook'].s_to
+            elif player.current_room == room['foyer']:
+                player.current_room = room['foyer'].s_to
+            elif player.current_room == room['treasure']:
+                player.current_room = room['treasure'].s_to
+            else:
+                print("That way is Forbidden, you cannot go there!")
+                continue
+
+        elif move == "e":
+            if player.current_room == room['foyer']:
+                player.current_room = room['foyer'].e_to
+            else:
+                print("That way is Forbidden, you cannot go there!")
+                continue
+
+        elif move == "w":
+            if player.current_room == room['narrow']:
+                player.current_room = room['narrow'].w_to
+            else:
+                print("That way is Forbidden, you cannot go there!")
+                continue
+
+    else:
+        print(f"Sorry but the chosen Option: {choice} does not exist.")
